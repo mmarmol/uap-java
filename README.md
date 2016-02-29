@@ -1,24 +1,23 @@
-# geolite2
-Just a couple of useful classes over http://dev.maxmind.com/geoip/geoip2/geolite2/
-  - It has a class to automatically re-load the database from a url and store it on memory.
-  - The database will be re-loaded one time by day if a different MD5 checksum found on destination, if not will keep the existen one.
-  - It adds a Guava Cache implementation for the database so it can replace the HashMap based offered by default by geolite2.
+# uap-java
+Is an implementation over https://github.com/ua-parser/uap-java
+  - Can auto schedule updates every one our retrieving the yaml from a url.
+  - It has a Guava-Cache implementation or can be extended to use others.
+  - Parse agent strings and retriever, Device, OS and User Agent information.
 
 Usage
 ----
-To start the ScheduledDatabaseReader:
+To start the Parser with schedule and GuavaCache:
 
-    ScheduledDatabaseReader reader = new ScheduledDatabaseReader()
+    Parser parser = new Parser()
     .cache(new GuavaCache())
-    .start();
-
+    .startSchedule();
 To start using it:
 
-    reader.databaseReader().city(....);
+    parser.parse(....);
 
 To stop the scheduling process:
 
-    reader.stop();
+    parser.stopSchedule();
 
 License
 ----
