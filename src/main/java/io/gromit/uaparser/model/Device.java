@@ -26,16 +26,19 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class Device {
 
 	/** The family. */
-	private String family;
+	public final String family, brand, model;
 
 	/**
 	 * Instantiates a new device.
 	 *
-	 * @param family
-	 *            the family
+	 * @param family the family
+	 * @param brand the brand
+	 * @param model the model
 	 */
-	public Device(String family) {
+	public Device(String family, String brand, String model) {
 		this.family = family;
+		this.brand = brand;
+		this.model = model;
 	}
 
 	/**
@@ -46,33 +49,59 @@ public class Device {
 	 * @return the device
 	 */
 	public static Device fromMap(Map<String, String> m) {
-		return new Device((String) m.get("family"));
+		return new Device(m.get("family"), m.get("brand"), m.get("model"));
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object other) {
-		if (other == this)
-			return true;
-		if (!(other instanceof Device))
-			return false;
-
-		Device o = (Device) other;
-		return (this.family != null && this.family.equals(o.family)) || this.family == o.family;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
+	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
 	public int hashCode() {
-		return family == null ? 0 : family.hashCode();
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((brand == null) ? 0 : brand.hashCode());
+		result = prime * result + ((family == null) ? 0 : family.hashCode());
+		result = prime * result + ((model == null) ? 0 : model.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Device)) {
+			return false;
+		}
+		Device other = (Device) obj;
+		if (brand == null) {
+			if (other.brand != null) {
+				return false;
+			}
+		} else if (!brand.equals(other.brand)) {
+			return false;
+		}
+		if (family == null) {
+			if (other.family != null) {
+				return false;
+			}
+		} else if (!family.equals(other.family)) {
+			return false;
+		}
+		if (model == null) {
+			if (other.model != null) {
+				return false;
+			}
+		} else if (!model.equals(other.model)) {
+			return false;
+		}
+		return true;
 	}
 
 	/*

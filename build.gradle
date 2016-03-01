@@ -33,6 +33,7 @@ dependencies {
     compile 'com.google.guava:guava:19.0'
     compile 'org.yaml:snakeyaml:1.17'
     compile 'org.apache.commons:commons-lang3:3.4'
+	compile 'com.fasterxml.jackson.core:jackson-databind:2.7.2'
     testCompile 'junit:junit:4.12' 
 }
 

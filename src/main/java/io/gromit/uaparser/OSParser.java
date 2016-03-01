@@ -64,18 +64,21 @@ public class OSParser {
 	/**
 	 * Parses the.
 	 *
-	 * @param agentString the agent string
+	 * @param agentString
+	 *            the agent string
 	 * @return the os
 	 */
-	public OS parse(String agentString){
+	public OS parse(String agentString) {
 		return this.parse(agentString, NoCache.NO_CACHE);
 	}
-	
+
 	/**
 	 * Parses the.
 	 *
-	 * @param agentString            the agent string
-	 * @param cache the cache
+	 * @param agentString
+	 *            the agent string
+	 * @param cache
+	 *            the cache
 	 * @return the os
 	 */
 	public OS parse(String agentString, Cache cache) {
@@ -83,7 +86,7 @@ public class OSParser {
 			return null;
 		}
 		OS os = cache.getOs(agentString);
-		if(os==null){
+		if (os == null) {
 			for (OSPattern p : patterns) {
 				if ((os = p.match(agentString)) != null) {
 					cache.putOS(agentString, os);
@@ -110,7 +113,8 @@ public class OSParser {
 		}
 
 		return (new OSPattern(Pattern.compile(regex), configMap.get("os_replacement"),
-				configMap.get("os_v1_replacement"), configMap.get("os_v2_replacement")));
+				configMap.get("os_v1_replacement"), configMap.get("os_v2_replacement"),
+				configMap.get("os_v3_replacement")));
 	}
 
 	/**
@@ -122,7 +126,7 @@ public class OSParser {
 		private final Pattern pattern;
 
 		/** The v2 replacement. */
-		private final String osReplacement, v1Replacement, v2Replacement;
+		private final String osReplacement, v1Replacement, v2Replacement, v3Replacement;
 
 		/**
 		 * Instantiates a new OS pattern.
@@ -136,11 +140,13 @@ public class OSParser {
 		 * @param v2Replacement
 		 *            the v2 replacement
 		 */
-		public OSPattern(Pattern pattern, String osReplacement, String v1Replacement, String v2Replacement) {
+		public OSPattern(Pattern pattern, String osReplacement, String v1Replacement, String v2Replacement,
+				String v3Replacement) {
 			this.pattern = pattern;
 			this.osReplacement = osReplacement;
 			this.v1Replacement = v1Replacement;
 			this.v2Replacement = v2Replacement;
+			this.v3Replacement = v3Replacement;
 		}
 
 		/**
@@ -181,11 +187,13 @@ public class OSParser {
 			} else if (groupCount >= 3) {
 				v2 = matcher.group(3);
 			}
-			if (groupCount >= 4) {
+			if (v3Replacement != null) {
+				v3 = v3Replacement;
+			} else if (groupCount >= 4) {
 				v3 = matcher.group(4);
-				if (groupCount >= 5) {
-					v4 = matcher.group(5);
-				}
+			}
+			if (groupCount >= 5) {
+				v4 = matcher.group(5);
 			}
 
 			return family == null ? null : new OS(family, v1, v2, v3, v4);
