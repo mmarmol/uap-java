@@ -142,41 +142,41 @@ public class Parser {
 		if(client!=null){
 			return client;
 		}
-		UserAgent ua = userAgentParser(agentString);
-		OS os = osParser(agentString);
-		Device device = deviceParser(agentString);
+		UserAgent ua = parseUserAgent(agentString);
+		OS os = parseOS(agentString);
+		Device device = parseDevice(agentString);
 		client = new Client(ua, os, device);
 		cache.putClient(agentString, client);
 		return client;
 	}
-	
+
 	/**
-	 * User agent parser.
+	 * Parses the user agent.
 	 *
 	 * @param agentString the agent string
 	 * @return the user agent
 	 */
-	public UserAgent userAgentParser(String agentString){
+	public UserAgent parseUserAgent(String agentString){
 		return uaParser.parse(agentString, cache);
 	}
 	
 	/**
-	 * Os parser.
+	 * Parses the os.
 	 *
 	 * @param agentString the agent string
 	 * @return the os
 	 */
-	public OS osParser(String agentString){
+	public OS parseOS(String agentString){
 		return osParser.parse(agentString, cache);
 	}
-	
+
 	/**
-	 * Device parser.
+	 * Parses the device.
 	 *
 	 * @param agentString the agent string
 	 * @return the device
 	 */
-	public Device deviceParser(String agentString){
+	public Device parseDevice(String agentString){
 		return deviceParser.parse(agentString, cache);
 	}
 
