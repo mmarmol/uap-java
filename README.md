@@ -19,6 +19,34 @@ To stop the scheduling process:
 
     parser.stopSchedule();
 
+Maven Repo
+----
+For Maven
+
+    <repository>
+		<repository>
+			<id>io.gromit.releases</id>
+			<url>http://repository.gromit.io.s3.amazonaws.com</url>
+		</repository>
+    </repository>
+
+    <dependency>
+    	<groupId>io.gromit</groupId>
+    	<artifactId>uap-java</artifactId>
+    	<version>0.1.0</version>
+    </dependency>
+
+For Gradle
+
+    maven {
+        url "http://repository.gromit.io.s3.amazonaws.com/"
+    }
+    
+    dependencies {
+    	compile 'io.gromit:uap-java:0.1.0'
+    }
+
+
 License
 ----
 Apache License http://www.apache.org/licenses/LICENSE-2.0
