@@ -61,6 +61,9 @@ public class Parser {
 	
 	/** The cache. */
 	private Cache cache = new NoCache();
+	
+	/** The clean cache on update. */
+	private Boolean cleanCacheOnUpdate = false;
 
 	/**
 	 * Instantiates a new parser.
@@ -105,6 +108,17 @@ public class Parser {
 	}
 	
 	/**
+	 * Clean cache on update.
+	 *
+	 * @param cleanCacheOnUpdate the clean cache on update
+	 * @return the parser
+	 */
+	public Parser cleanCacheOnUpdate(Boolean cleanCacheOnUpdate){
+		this.cleanCacheOnUpdate = cleanCacheOnUpdate;
+		return this;
+	}
+	
+	/**
 	 * Start schedule.
 	 *
 	 * @return the parser
@@ -138,16 +152,10 @@ public class Parser {
 	 * @return the client
 	 */
 	public Client parse(String agentString) {
-		Client client = cache.getClient(agentString);
-		if(client!=null){
-			return client;
-		}
 		UserAgent ua = parseUserAgent(agentString);
 		OS os = parseOS(agentString);
 		Device device = parseDevice(agentString);
-		client = new Client(ua, os, device);
-		cache.putClient(agentString, client);
-		return client;
+		return new Client(ua, os, device);
 	}
 
 	/**
@@ -187,7 +195,7 @@ public class Parser {
 	 */
 	private void initialize(String url){
 		try{
-			this.initialize(new URL(url).openStream());
+			initialize(new URL(url).openStream());
 			logger.info("reloaded ua-parser from remote url {}",uaRegexYaml);
 		}catch(Exception e){
 			logger.error("error loading from remote",e);
@@ -223,5 +231,8 @@ public class Parser {
 			throw new IllegalArgumentException("device_parsers is missing from yaml");
 		}
 		deviceParser = DeviceParser.fromList(deviceParserConfigs);
+		if(cleanCacheOnUpdate){
+			cache.clean();
+		}
 	}
 }

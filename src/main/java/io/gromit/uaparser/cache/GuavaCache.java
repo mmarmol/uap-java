@@ -17,7 +17,6 @@ package io.gromit.uaparser.cache;
 
 import com.google.common.cache.CacheBuilder;
 
-import io.gromit.uaparser.model.Client;
 import io.gromit.uaparser.model.Device;
 import io.gromit.uaparser.model.OS;
 import io.gromit.uaparser.model.UserAgent;
@@ -88,26 +87,6 @@ public class GuavaCache implements Cache{
     }
 
 	/* (non-Javadoc)
-	 * @see io.gromit.uaparser.cache.Cache#getClient(java.lang.String)
-	 */
-	@Override
-	public Client getClient(String agentString) {
-		Object object = cache.getIfPresent(Type.client.key(agentString));
-		if(object == null){
-			return null;
-		}
-		return (Client)object;
-	}
-
-	/* (non-Javadoc)
-	 * @see io.gromit.uaparser.cache.Cache#putClient(java.lang.String, io.gromit.uaparser.model.Client)
-	 */
-	@Override
-	public void putClient(String agentString, Client object) {
-		cache.put(Type.client.key(agentString), object);
-	}
-
-	/* (non-Javadoc)
 	 * @see io.gromit.uaparser.cache.Cache#getOs(java.lang.String)
 	 */
 	@Override
@@ -165,6 +144,11 @@ public class GuavaCache implements Cache{
 	@Override
 	public void putUserAgent(String agentString, UserAgent object) {
 		cache.put(Type.userAgent.key(agentString), object);
+	}
+
+	@Override
+	public void clean() {
+		cache.invalidateAll();
 	}
     
 }

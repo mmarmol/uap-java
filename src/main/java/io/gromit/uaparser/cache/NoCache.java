@@ -15,7 +15,6 @@
  */
 package io.gromit.uaparser.cache;
 
-import io.gromit.uaparser.model.Client;
 import io.gromit.uaparser.model.Device;
 import io.gromit.uaparser.model.OS;
 import io.gromit.uaparser.model.UserAgent;
@@ -28,21 +27,6 @@ public class NoCache implements Cache{
 	/** The Constant NO_CACHE. */
 	public static final NoCache NO_CACHE = new NoCache();
 	
-	/* (non-Javadoc)
-	 * @see io.gromit.uaparser.cache.Cache#getClient(java.lang.String)
-	 */
-	@Override
-	public Client getClient(String userAgent) {
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see io.gromit.uaparser.cache.Cache#putClient(java.lang.String, io.gromit.uaparser.model.Client)
-	 */
-	@Override
-	public void putClient(String userAgent, Client object) {
-	}
-
 	/* (non-Javadoc)
 	 * @see io.gromit.uaparser.cache.Cache#getOs(java.lang.String)
 	 */
@@ -86,6 +70,13 @@ public class NoCache implements Cache{
 	 */
 	@Override
 	public void putUserAgent(String userAgent, UserAgent object) {
+	}
+
+	/* (non-Javadoc)
+	 * @see io.gromit.uaparser.cache.Cache#clean()
+	 */
+	@Override
+	public void clean() {
 	}
 
 }
