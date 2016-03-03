@@ -15,15 +15,18 @@
  */
 package io.gromit.uaparser;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.security.MessageDigest;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
@@ -50,17 +53,14 @@ public class Parser {
 	/** The ua regex yaml. */
 	private String uaRegexYaml = "https://raw.githubusercontent.com/ua-parser/uap-core/master/regexes.yaml";
 	
-	/** The ua parser. */
-	private UserAgentParser uaParser;
-
-	/** The os parser. */
-	private OSParser osParser;
-
-	/** The device parser. */
-	private DeviceParser deviceParser;
+	/** The ua regex yaml m d5. */
+	private String uaRegexYamlMD5 = null;
 	
 	/** The cache. */
-	private Cache cache = new NoCache();
+	private Cache cache = NoCache.NO_CACHE;
+	
+	/** The parsers. */
+	private Parsers parsers = null;
 	
 	/** The clean cache on update. */
 	private Boolean cleanCacheOnUpdate = false;
@@ -152,9 +152,10 @@ public class Parser {
 	 * @return the client
 	 */
 	public Client parse(String agentString) {
-		UserAgent ua = parseUserAgent(agentString);
-		OS os = parseOS(agentString);
-		Device device = parseDevice(agentString);
+		Parsers parsersForCall = parsers;
+		UserAgent ua = parsersForCall.uaParser.parse(agentString, cache);
+		OS os = parsersForCall.osParser.parse(agentString, cache);
+		Device device = parsersForCall.deviceParser.parse(agentString, cache);
 		return new Client(ua, os, device);
 	}
 
@@ -165,7 +166,7 @@ public class Parser {
 	 * @return the user agent
 	 */
 	public UserAgent parseUserAgent(String agentString){
-		return uaParser.parse(agentString, cache);
+		return parsers.uaParser.parse(agentString, cache);
 	}
 	
 	/**
@@ -175,7 +176,7 @@ public class Parser {
 	 * @return the os
 	 */
 	public OS parseOS(String agentString){
-		return osParser.parse(agentString, cache);
+		return parsers.osParser.parse(agentString, cache);
 	}
 
 	/**
@@ -185,7 +186,7 @@ public class Parser {
 	 * @return the device
 	 */
 	public Device parseDevice(String agentString){
-		return deviceParser.parse(agentString, cache);
+		return parsers.deviceParser.parse(agentString, cache);
 	}
 
 	/**
@@ -209,30 +210,73 @@ public class Parser {
 	 *            the regex yaml
 	 */
 	private void initialize(InputStream regexYaml) {
+		byte[] bytes = null;
+		String newMD5 = null;
+		try {
+			bytes = IOUtils.toByteArray(regexYaml);
+			newMD5 = MessageDigest.getInstance("MD5").digest(bytes).toString();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		if(newMD5.equals(uaRegexYamlMD5)){
+			logger.info("same MD5 content for both files, do not load it");
+			return;
+		}
+		uaRegexYamlMD5 = newMD5;
 		Yaml yaml = new Yaml(new SafeConstructor());
 		@SuppressWarnings("unchecked")
 		Map<String, List<Map<String, String>>> regexConfig = (Map<String, List<Map<String, String>>>) yaml
-				.load(regexYaml);
+				.load(new ByteArrayInputStream(bytes));
 
 		List<Map<String, String>> uaParserConfigs = regexConfig.get("user_agent_parsers");
 		if (uaParserConfigs == null) {
 			throw new IllegalArgumentException("user_agent_parsers is missing from yaml");
 		}
-		uaParser = UserAgentParser.fromList(uaParserConfigs);
+		UserAgentParser uaParser = UserAgentParser.fromList(uaParserConfigs);
 
 		List<Map<String, String>> osParserConfigs = regexConfig.get("os_parsers");
 		if (osParserConfigs == null) {
 			throw new IllegalArgumentException("os_parsers is missing from yaml");
 		}
-		osParser = OSParser.fromList(osParserConfigs);
+		OSParser osParser = OSParser.fromList(osParserConfigs);
 
 		List<Map<String, String>> deviceParserConfigs = regexConfig.get("device_parsers");
 		if (deviceParserConfigs == null) {
 			throw new IllegalArgumentException("device_parsers is missing from yaml");
 		}
-		deviceParser = DeviceParser.fromList(deviceParserConfigs);
+		DeviceParser deviceParser = DeviceParser.fromList(deviceParserConfigs);
+		parsers = new Parsers(uaParser, osParser, deviceParser);
 		if(cleanCacheOnUpdate){
 			cache.clean();
 		}
+	}
+	
+	/**
+	 * The Class Parsers.
+	 */
+	public static class Parsers {
+		
+		/** The ua parser. */
+		public final UserAgentParser uaParser;
+
+		/** The os parser. */
+		public final OSParser osParser;
+
+		/** The device parser. */
+		public final DeviceParser deviceParser;
+
+		/**
+		 * Instantiates a new parsers.
+		 *
+		 * @param uaParser the ua parser
+		 * @param osParser the os parser
+		 * @param deviceParser the device parser
+		 */
+		public Parsers(UserAgentParser uaParser, OSParser osParser, DeviceParser deviceParser) {
+			this.uaParser = uaParser;
+			this.osParser = osParser;
+			this.deviceParser = deviceParser;
+		}
+		
 	}
 }
