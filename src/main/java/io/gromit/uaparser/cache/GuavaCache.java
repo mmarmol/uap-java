@@ -41,10 +41,7 @@ public class GuavaCache implements Cache{
     	userAgent,
     	
     	/** The device. */
-    	device,
-    	
-    	/** The client. */
-    	client;
+    	device;
     	
     	/**
 	     * Key.
