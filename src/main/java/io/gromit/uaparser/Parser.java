@@ -214,7 +214,7 @@ public class Parser {
 		String newMD5 = null;
 		try {
 			bytes = IOUtils.toByteArray(regexYaml);
-			newMD5 = MessageDigest.getInstance("MD5").digest(bytes).toString();
+			newMD5 = new String(MessageDigest.getInstance("MD5").digest(bytes));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

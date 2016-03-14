@@ -33,7 +33,7 @@ For Maven
     <dependency>
     	<groupId>io.gromit</groupId>
     	<artifactId>uap-java</artifactId>
-    	<version>0.3.0</version>
+    	<version>0.3.1</version>
     </dependency>
 
 For Gradle
@@ -43,7 +43,7 @@ For Gradle
     }
     
     dependencies {
-    	compile 'io.gromit:uap-java:0.3.0'
+    	compile 'io.gromit:uap-java:0.3.1'
     }
 
 
