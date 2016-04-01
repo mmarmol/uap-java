@@ -21,9 +21,9 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
- * The Class UserAgent.
+ * The Class Browser.
  */
-public class UserAgent {
+public class Browser {
 
 	/** The patch. */
 	public final String family, major, minor, patch;
@@ -40,7 +40,7 @@ public class UserAgent {
 	 * @param patch
 	 *            the patch
 	 */
-	public UserAgent(String family, String major, String minor, String patch) {
+	public Browser(String family, String major, String minor, String patch) {
 		this.family = family;
 		this.major = major;
 		this.minor = minor;
@@ -54,8 +54,8 @@ public class UserAgent {
 	 *            the m
 	 * @return the user agent
 	 */
-	public static UserAgent fromMap(Map<String, String> m) {
-		return new UserAgent(m.get("family"), m.get("major"), m.get("minor"), m.get("patch"));
+	public static Browser fromMap(Map<String, String> m) {
+		return new Browser(m.get("family"), m.get("major"), m.get("minor"), m.get("patch"));
 	}
 
 	/*
@@ -67,10 +67,10 @@ public class UserAgent {
 	public boolean equals(Object other) {
 		if (other == this)
 			return true;
-		if (!(other instanceof UserAgent))
+		if (!(other instanceof Browser))
 			return false;
 
-		UserAgent o = (UserAgent) other;
+		Browser o = (Browser) other;
 		return ((this.family != null && this.family.equals(o.family)) || this.family == o.family)
 				&& ((this.major != null && this.major.equals(o.major)) || this.major == o.major)
 				&& ((this.minor != null && this.minor.equals(o.minor)) || this.minor == o.minor)

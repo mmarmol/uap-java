@@ -19,7 +19,7 @@ import com.google.common.cache.CacheBuilder;
 
 import io.gromit.uaparser.model.Device;
 import io.gromit.uaparser.model.OS;
-import io.gromit.uaparser.model.UserAgent;
+import io.gromit.uaparser.model.Browser;
 
 /**
  * The Class GuavaCache.
@@ -46,7 +46,7 @@ public class GuavaCache implements Cache{
     	/**
 	     * Key.
 	     *
-	     * @param userAgent the user agent
+	     * @param browser the user agent
 	     * @return the string
 	     */
 	    private String key(String userAgent){
@@ -127,19 +127,19 @@ public class GuavaCache implements Cache{
 	 * @see io.gromit.uaparser.cache.Cache#getUserAgent(java.lang.String)
 	 */
 	@Override
-	public UserAgent getUserAgent(String agentString) {
+	public Browser getUserAgent(String agentString) {
 		Object object = cache.getIfPresent(Type.userAgent.key(agentString));
 		if(object == null){
 			return null;
 		}
-		return (UserAgent)object;
+		return (Browser)object;
 	}
 
 	/* (non-Javadoc)
-	 * @see io.gromit.uaparser.cache.Cache#putUserAgent(java.lang.String, io.gromit.uaparser.model.UserAgent)
+	 * @see io.gromit.uaparser.cache.Cache#putUserAgent(java.lang.String, io.gromit.uaparser.model.Browser)
 	 */
 	@Override
-	public void putUserAgent(String agentString, UserAgent object) {
+	public void putUserAgent(String agentString, Browser object) {
 		cache.put(Type.userAgent.key(agentString), object);
 	}
 

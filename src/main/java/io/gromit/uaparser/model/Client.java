@@ -21,7 +21,10 @@ package io.gromit.uaparser.model;
 public class Client {
 
 	/** The user agent. */
-	public final UserAgent userAgent;
+	public final String userAgent;
+
+	/** The browser. */
+	public final Browser browser;
 
 	/** The os. */
 	public final OS os;
@@ -29,18 +32,18 @@ public class Client {
 	/** The device. */
 	public final Device device;
 
+
 	/**
 	 * Instantiates a new client.
 	 *
-	 * @param userAgent
-	 *            the user agent
-	 * @param os
-	 *            the os
-	 * @param device
-	 *            the device
+	 * @param userAgent the user agent
+	 * @param browser the browser
+	 * @param os the os
+	 * @param device the device
 	 */
-	public Client(UserAgent userAgent, OS os, Device device) {
+	public Client(String userAgent, Browser browser, OS os, Device device) {
 		this.userAgent = userAgent;
+		this.browser = browser;
 		this.os = os;
 		this.device = device;
 	}
@@ -58,7 +61,7 @@ public class Client {
 			return false;
 
 		Client o = (Client) other;
-		return ((this.userAgent != null && this.userAgent.equals(o.userAgent)) || this.userAgent == o.userAgent)
+		return ((this.browser != null && this.browser.equals(o.browser)) || this.browser == o.browser)
 				&& ((this.os != null && this.os.equals(o.os)) || this.os == o.os)
 				&& ((this.device != null && this.device.equals(o.device)) || this.device == o.device);
 	}
@@ -70,7 +73,7 @@ public class Client {
 	 */
 	@Override
 	public int hashCode() {
-		int h = userAgent == null ? 0 : userAgent.hashCode();
+		int h = browser == null ? 0 : browser.hashCode();
 		h += os == null ? 0 : os.hashCode();
 		h += device == null ? 0 : device.hashCode();
 		return h;
@@ -83,6 +86,6 @@ public class Client {
 	 */
 	@Override
 	public String toString() {
-		return String.format("{\"user_agent\": %s, \"os\": %s, \"device\": %s}", userAgent, os, device);
+		return String.format("{\"user_agent\": %s, \"os\": %s, \"device\": %s}", browser, os, device);
 	}
 }

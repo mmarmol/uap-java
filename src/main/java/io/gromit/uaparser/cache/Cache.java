@@ -17,7 +17,7 @@ package io.gromit.uaparser.cache;
 
 import io.gromit.uaparser.model.Device;
 import io.gromit.uaparser.model.OS;
-import io.gromit.uaparser.model.UserAgent;
+import io.gromit.uaparser.model.Browser;
 
 /**
  * The Interface ParserCache.
@@ -62,7 +62,7 @@ public interface Cache {
 	 * @param agentString the agent string
 	 * @return the user agent
 	 */
-	UserAgent getUserAgent(String agentString);
+	Browser getUserAgent(String agentString);
 
 	/**
 	 * Put user agent.
@@ -70,7 +70,7 @@ public interface Cache {
 	 * @param agentString the agent string
 	 * @param object the object
 	 */
-	void putUserAgent(String agentString, UserAgent object);
+	void putUserAgent(String agentString, Browser object);
 	
 	/**
 	 * Clean.

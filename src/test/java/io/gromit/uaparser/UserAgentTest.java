@@ -1,20 +1,20 @@
 package io.gromit.uaparser;
 
-import io.gromit.uaparser.model.UserAgent;
+import io.gromit.uaparser.model.Browser;
 
-public class UserAgentTest extends DataTest<UserAgent> {
+public class UserAgentTest extends DataTest<Browser> {
 	
 	@Override
-	protected UserAgent getRandomInstance(long seed, StringGenerator g) {
+	protected Browser getRandomInstance(long seed, StringGenerator g) {
 		random.setSeed(seed);
 		String family = g.getString(256), major = (random.nextBoolean() ? g.getString(8) : null),
 				minor = (random.nextBoolean() ? g.getString(8) : null),
 				patch = (random.nextBoolean() ? g.getString(8) : null);
-		return new UserAgent(family, major, minor, patch);
+		return new Browser(family, major, minor, patch);
 	}
 
 	@Override
-	protected UserAgent getBlankInstance() {
-		return new UserAgent(null, null, null, null);
+	protected Browser getBlankInstance() {
+		return new Browser(null, null, null, null);
 	}
 }

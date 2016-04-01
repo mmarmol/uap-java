@@ -37,7 +37,7 @@ import io.gromit.uaparser.cache.NoCache;
 import io.gromit.uaparser.model.Client;
 import io.gromit.uaparser.model.Device;
 import io.gromit.uaparser.model.OS;
-import io.gromit.uaparser.model.UserAgent;
+import io.gromit.uaparser.model.Browser;
 
 /**
  * The Class Parser.
@@ -153,19 +153,19 @@ public class Parser {
 	 */
 	public Client parse(String agentString) {
 		Parsers parsersForCall = parsers;
-		UserAgent ua = parsersForCall.uaParser.parse(agentString, cache);
+		Browser browser = parsersForCall.uaParser.parse(agentString, cache);
 		OS os = parsersForCall.osParser.parse(agentString, cache);
 		Device device = parsersForCall.deviceParser.parse(agentString, cache);
-		return new Client(ua, os, device);
+		return new Client(agentString, browser, os, device);
 	}
 
 	/**
-	 * Parses the user agent.
+	 * Parses the browser.
 	 *
 	 * @param agentString the agent string
-	 * @return the user agent
+	 * @return the browser
 	 */
-	public UserAgent parseUserAgent(String agentString){
+	public Browser parseBrowser(String agentString){
 		return parsers.uaParser.parse(agentString, cache);
 	}
 	

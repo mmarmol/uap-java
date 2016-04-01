@@ -17,7 +17,7 @@ package io.gromit.uaparser.cache;
 
 import io.gromit.uaparser.model.Device;
 import io.gromit.uaparser.model.OS;
-import io.gromit.uaparser.model.UserAgent;
+import io.gromit.uaparser.model.Browser;
 
 /**
  * The Class NoCache.
@@ -61,15 +61,15 @@ public class NoCache implements Cache{
 	 * @see io.gromit.uaparser.cache.Cache#getUserAgent(java.lang.String)
 	 */
 	@Override
-	public UserAgent getUserAgent(String userAgent) {
+	public Browser getUserAgent(String userAgent) {
 		return null;
 	}
 
 	/* (non-Javadoc)
-	 * @see io.gromit.uaparser.cache.Cache#putUserAgent(java.lang.String, io.gromit.uaparser.model.UserAgent)
+	 * @see io.gromit.uaparser.cache.Cache#putUserAgent(java.lang.String, io.gromit.uaparser.model.Browser)
 	 */
 	@Override
-	public void putUserAgent(String userAgent, UserAgent object) {
+	public void putUserAgent(String userAgent, Browser object) {
 	}
 
 	/* (non-Javadoc)

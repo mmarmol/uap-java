@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 import io.gromit.uaparser.cache.Cache;
 import io.gromit.uaparser.cache.NoCache;
-import io.gromit.uaparser.model.UserAgent;
+import io.gromit.uaparser.model.Browser;
 
 /**
  * The Class UserAgentParser.
@@ -65,7 +65,7 @@ public class UserAgentParser {
 	 * @param agentString the agent string
 	 * @return the user agent
 	 */
-	public UserAgent parse(String agentString){
+	public Browser parse(String agentString){
 		return this.parse(agentString, NoCache.NO_CACHE);
 	}
 	
@@ -76,11 +76,11 @@ public class UserAgentParser {
 	 * @param cache the cache
 	 * @return the user agent
 	 */
-	public UserAgent parse(String agentString, Cache cache) {
+	public Browser parse(String agentString, Cache cache) {
 		if (agentString == null) {
 			return null;
 		}
-		UserAgent agent = cache.getUserAgent(agentString);
+		Browser agent = cache.getUserAgent(agentString);
 		if(agent==null){
 			for (UAPattern p : patterns) {
 				if ((agent = p.match(agentString)) != null) {
@@ -88,7 +88,7 @@ public class UserAgentParser {
 					return agent;
 				}
 			}
-			agent = new UserAgent("Other", null, null, null);
+			agent = new Browser("Other", null, null, null);
 			cache.putUserAgent(agentString, agent);
 		}
 		return agent;
@@ -148,7 +148,7 @@ public class UserAgentParser {
 		 *            the agent string
 		 * @return the user agent
 		 */
-		public UserAgent match(String agentString) {
+		public Browser match(String agentString) {
 			String family = null, v1 = null, v2 = null, v3 = null;
 			Matcher matcher = pattern.matcher(agentString);
 
@@ -182,7 +182,7 @@ public class UserAgentParser {
 					v3 = matcher.group(4);
 				}
 			}
-			return family == null ? null : new UserAgent(family, v1, v2, v3);
+			return family == null ? null : new Browser(family, v1, v2, v3);
 		}
 	}
 }
