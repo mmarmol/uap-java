@@ -27,6 +27,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
@@ -39,6 +40,7 @@ import io.gromit.uaparser.model.Device;
 import io.gromit.uaparser.model.OS;
 import io.gromit.uaparser.model.Browser;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class Parser.
  */
@@ -46,6 +48,8 @@ public class Parser {
 
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(Parser.class);
+	
+	public static final String FAIL_SAFE_URL = "io.gromit.uaparser.fail.safe.url";
 	
 	/** The scheduled executor service. */
 	private ScheduledExecutorService scheduledExecutorService;
@@ -95,7 +99,7 @@ public class Parser {
 		this.uaRegexYaml=url;
 		return this;
 	}
-	
+
 	/**
 	 * Cache.
 	 *
@@ -197,9 +201,14 @@ public class Parser {
 	private void initialize(String url){
 		try{
 			initialize(new URL(url).openStream());
-			logger.info("reloaded ua-parser from remote url {}",uaRegexYaml);
+			logger.info("reloaded ua-parser from remote url {}",url);
 		}catch(Exception e){
 			logger.error("error loading from remote",e);
+			if(StringUtils.isNotBlank(System.getProperty(FAIL_SAFE_URL))
+					&& !System.getProperty(FAIL_SAFE_URL).equalsIgnoreCase(url)){
+				logger.info("re-loading from ua-parser fail safe url {}",url);
+				initialize(System.getProperty(FAIL_SAFE_URL));
+			}
 		}
 	}
 	
