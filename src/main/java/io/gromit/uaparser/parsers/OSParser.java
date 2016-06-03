@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.gromit.uaparser;
+package io.gromit.uaparser.parsers;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

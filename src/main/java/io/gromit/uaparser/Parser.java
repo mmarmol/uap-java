@@ -38,9 +38,11 @@ import io.gromit.uaparser.cache.NoCache;
 import io.gromit.uaparser.model.Client;
 import io.gromit.uaparser.model.Device;
 import io.gromit.uaparser.model.OS;
+import io.gromit.uaparser.parsers.DeviceParser;
+import io.gromit.uaparser.parsers.OSParser;
+import io.gromit.uaparser.parsers.UserAgentParser;
 import io.gromit.uaparser.model.Browser;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Parser.
  */
@@ -49,6 +51,7 @@ public class Parser {
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(Parser.class);
 	
+	/** The Constant FAIL_SAFE_URL. */
 	public static final String FAIL_SAFE_URL = "io.gromit.uaparser.fail.safe.url";
 	
 	/** The scheduled executor service. */
@@ -68,6 +71,16 @@ public class Parser {
 	
 	/** The clean cache on update. */
 	private Boolean cleanCacheOnUpdate = false;
+	
+	/** The loader listener. */
+	private LoaderListener loaderListener = new LoaderListener() {
+		@Override
+		public void success(String url) {
+		}
+		@Override
+		public void failure(String url, Exception e) {
+		}
+	};
 
 	/**
 	 * Instantiates a new parser.
@@ -108,6 +121,17 @@ public class Parser {
 	 */
 	public Parser cache(Cache cache){
 		this.cache = cache;
+		return this;
+	}
+	
+	/**
+	 * Loader listener.
+	 *
+	 * @param loaderListener the loader listener
+	 * @return the parser
+	 */
+	public Parser loaderListener(LoaderListener loaderListener){
+		this.loaderListener = loaderListener;
 		return this;
 	}
 	
@@ -201,9 +225,11 @@ public class Parser {
 	private void initialize(String url){
 		try{
 			initialize(new URL(url).openStream());
+			loaderListener.success(url);
 			logger.info("reloaded ua-parser from remote url {}",url);
 		}catch(Exception e){
 			logger.error("error loading from remote",e);
+			loaderListener.failure(url, e);
 			if(StringUtils.isNotBlank(System.getProperty(FAIL_SAFE_URL))
 					&& !System.getProperty(FAIL_SAFE_URL).equalsIgnoreCase(url)){
 				logger.info("re-loading from ua-parser fail safe url {}",url);

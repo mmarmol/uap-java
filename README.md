@@ -3,6 +3,8 @@ Is an implementation over https://github.com/ua-parser/uap-java
   - Can auto schedule updates every one our retrieving the yaml from a url.
   - It has a Guava-Cache implementation or can be extended to use others.
   - Parse agent strings and retriever, Device, OS and User Agent information.
+  - Added failsafe url for resource
+  - Added url loading success and failure listener
 
 Usage
 ----
@@ -33,7 +35,7 @@ For Maven
     <dependency>
     	<groupId>io.gromit</groupId>
     	<artifactId>uap-java</artifactId>
-    	<version>0.4.1</version>
+    	<version>0.5.0</version>
     </dependency>
 
 For Gradle
@@ -43,7 +45,7 @@ For Gradle
     }
     
     dependencies {
-    	compile 'io.gromit:uap-java:0.4.1'
+    	compile 'io.gromit:uap-java:0.5.0'
     }
 
 
